@@ -12,6 +12,7 @@ use Hyde\Pages\MarkdownPage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Translation\TranslationServiceProvider;
 use Melasistema\HydeMultilanguageModule\Middleware\SetLocale;
+use Melasistema\HydeMultilanguageModule\Models\MultilingualRoute;
 use Melasistema\HydeMultilanguageModule\Pages\MultilingualBladePage;
 use Melasistema\HydeMultilanguageModule\Pages\MultilingualDocumentationPage;
 use Melasistema\HydeMultilanguageModule\Pages\MultilingualHtmlPage;
@@ -32,7 +33,6 @@ use Melasistema\HydeMultilanguageModule\Services\TranslationService;
  * @license MIT License
  *
  */
-
 class HydeMultilanguageServiceProvider extends ServiceProvider
 {
     /**
@@ -141,7 +141,7 @@ class HydeMultilanguageServiceProvider extends ServiceProvider
                 $localizedLink = $locale === $defaultLocale ? $baseLink : "{$locale}/{$baseLink}";
 
                 // Create a new MultilingualRoute instance for the localized route
-                $localizedRoute = new \Melasistema\HydeMultilanguageModule\Models\MultilingualRoute($route->getPage());
+                $localizedRoute = new MultilingualRoute($route->getPage());
 
                 // Set the page for the localized route
                 $localizedRoute->setPage($this->createLocalizedPageForRoute($route->getPage(), $locale));
@@ -161,9 +161,9 @@ class HydeMultilanguageServiceProvider extends ServiceProvider
      *
      * @param $page
      * @param string $locale The locale to create the page for.
-     * @return MultilingualBladePage|MultilingualDocumentationPage|MultilingualHtmlPage|MultilingualMarkdownPage
+     * @return MultilingualBladePage|MultilingualDocumentationPage|MultilingualHtmlPage|MultilingualMarkdownPage|mixed
      */
-    protected function createLocalizedPageForRoute($page, string $locale)
+    protected function createLocalizedPageForRoute($page, string $locale): mixed
     {
         if ($page instanceof BladePage) {
             return new MultilingualBladePage($page->identifier, $locale);
