@@ -32,4 +32,28 @@ class MultilingualRoute extends BaseRoute
     {
         return $this->page;
     }
+
+    /**
+     * Set a new key for the route.
+     *
+     * @param string $key
+     * @return $this
+     */
+    public function setKey(string $key): self
+    {
+        $this->key = $key; // Update the `key` property
+        return $this; // Return the instance for method chaining
+    }
+
+    /**
+     * Set a new URI for the route.
+     *
+     * @param string $uri
+     * @return $this
+     */
+    public function setUri(string $uri): self
+    {
+        $this->uri = $uri; // Update the `uri` property
+        return $this; // Return the instance for method chaining
+    }
 }

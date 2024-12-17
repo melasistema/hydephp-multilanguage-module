@@ -6,10 +6,16 @@ namespace Melasistema\HydeMultilanguageModule\Helpers;
 
 class UrlHelper
 {
-    function localized_url($path, $locale = null)
+    /**
+     * Generate a localized URL.
+     *
+     * @param string $path
+     * @param string|null $locale
+     * @return string
+     */
+    function localized_url($path, $locale = null): string
     {
         $locale = $locale ?? app()->getLocale();
         return url($locale . '/' . ltrim($path, '/'));
     }
-
 }

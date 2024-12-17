@@ -14,5 +14,5 @@
 
 return [
     'default_language' => 'en',
-    'supported_languages' => ['it','de'],
+    'translations' => ['it','de'],
 ];

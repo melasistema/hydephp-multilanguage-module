@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Melasistema\HydeMultilanguageModule\Pages;
 
-use Hyde\Markdown\Models\FrontMatter;
 use Hyde\Pages\BladePage;
-use Illuminate\Support\Facades\View;
 
 /**
  * Multilingual Blade Page.
@@ -15,62 +13,61 @@ use Illuminate\Support\Facades\View;
  */
 class MultilingualBladePage extends BladePage
 {
-    public string $locale;
+    protected string $locale;
 
-    /**
-     * Constructor to initialize the Multilingual Blade Page.
-     *
-     * @param string $identifier The identifier, which also serves as the view key.
-     * @param string $locale The locale for the page (e.g., 'en', 'it').
-     * @param FrontMatter|array $matter Optional front matter for the page.
-     */
-    public function __construct(string $identifier = '', string $locale = 'en', FrontMatter|array $matter = [])
+    public function __construct(string $identifier, string $locale = 'en', array $matter = [])
     {
         $this->locale = $locale;
+
+        // Ensure the identifier is correctly handled for multilingual pages
+        if ($locale !== config('hyde-multilanguage.default_language', 'en')) {
+            // Ensure we don't have a nested locale like `de/it/index`
+            $identifierParts = explode('/', $identifier);
+
+            // Only prepend the locale if the first part isn't a locale
+            if (count($identifierParts) === 1 || $identifierParts[0] !== $locale) {
+                $identifier = "{$locale}/{$identifier}";
+            }
+        }
+
         parent::__construct($identifier, $matter);
     }
 
     /**
-     * Get the Blade view for this page with a locale prefix.
-     *
-     * @return string
+     * Override the route key generation to handle languages correctly.
      */
-    public function getBladeView(): string
+    public function getRouteKey(): string
     {
-        $viewName = $this->locale . '.' . $this->identifier;
+        // If the page is in the default language, use the normal route key
+        if ($this->locale === config('hyde-multilanguage.default_language', 'en')) {
+            return $this->routeKey;
+        }
 
-        // Ensure that the full path like '_pages/' is not included in the identifier
-        return $this->identifier;  // This now just returns the identifier (e.g., 'it.about')
-    }
+        // Avoid prepending the locale when it's already included in the route key
+        if (strpos($this->routeKey, "{$this->locale}/") === 0) {
+            return $this->routeKey; // Already prefixed with the locale
+        }
 
-
-    /**
-     * Compile the Blade page with localized content.
-     *
-     * @return string
-     */
-    public function compile(): string
-    {
-        return View::make($this->getBladeView(), [
-            'locale' => $this->locale,
-            'page' => $this,
-        ])->render();
+        // Prepend the locale to the route key only once
+        return "{$this->locale}/{$this->routeKey}";
     }
 
     /**
-     * Get the localized URL path for this page.
-     *
-     * @return string
+     * Override the output path to include the language directory if needed.
      */
-    public function getLocalizedOutputPath(): string
+    public function getOutputPath(): string
     {
-        $baseOutputPath = parent::getOutputPath();
+        // If the page is in the default language, use the normal output path
+        if ($this->locale === config('hyde-multilanguage.default_language', 'en')) {
+            return parent::getOutputPath();
+        }
 
-        // Add locale as a prefix, except for the default locale.
-        $defaultLocale = config('hyde-multilanguage.default_language', 'en');
+        // Ensure the locale is only prepended once to the output path
+        $outputPath = parent::getOutputPath();
+        if (strpos($outputPath, "{$this->locale}/") === 0) {
+            return $outputPath; // Already prefixed with the locale
+        }
 
-        return $this->locale === $defaultLocale
-            ? $baseOutputPath
-            : $this->locale . '/' . $baseOutputPath;
+        return "{$this->locale}/{$outputPath}";
     }
 }
