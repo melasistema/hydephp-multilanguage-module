@@ -1,0 +1,36 @@
+{
+    "name": "melasistema/hyde-multilanguage-module",
+    "description": "Bring the multi language functionality to HydePHP",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.0.1",
+    "keywords": ["hydephp", "hyde", "translations", "multi-language", "static-site-generator", "laravel", "tailwindcss", "php"],
+    "autoload": {
+        "psr-4": {
+            "Melasistema\\HydeMultilanguageModule\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Luca Visciola",
+            "email": "info@melasistema.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "hyde/framework": "^1.7",
+        "illuminate/translation": "^10.0",
+        "illuminate/support": "^10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Melasistema\\HydeMultilanguageModule\\HydeMultilanguageServiceProvider"
+            ]
+        }
+    }
+}
