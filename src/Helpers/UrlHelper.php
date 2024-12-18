@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Melasistema\HydeMultilanguageModule\Helpers;
 
+/**
+ * Class UrlHelper
+ * @package Melasistema\HydeMultilanguageModule\Helpers
+ */
 class UrlHelper
 {
     /**
