@@ -56,4 +56,13 @@ class MultilingualRoute extends BaseRoute
         $this->uri = $uri; // Update the `uri` property
         return $this; // Return the instance for method chaining
     }
+
+    /**
+     * Get the URI for the route.
+     */
+    public function getUri(): string
+    {
+        // Return the value of the uri property that was set by setUri()
+        return $this->uri;
+    }
 }
