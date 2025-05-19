@@ -26,7 +26,7 @@ Despite these measures, the `BindingResolutionException` persists. This indicate
 
 **Hit the error:**
     
-Consider a simple Blade file like `resources/views/pages/about.blade.php`
+Consider a simple Blade file like `_pages/about.blade.php`
 
 ```blade
 @extends('hyde::layouts.app')
